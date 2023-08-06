@@ -1,7 +1,7 @@
 {
-  "name": "google-web-scraper.backend",
+  "name": "nimble-assessment.backend",
   "version": "1.0.0",
-  "description": "Google web scrapper Backend",
+  "description": "Google web scrapper Backend - Nimble Assessment",
   "main": "index.js",
   "scripts": {
     "start": "nodemon src/index.js",
