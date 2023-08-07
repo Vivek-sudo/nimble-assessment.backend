@@ -1,5 +1,5 @@
 {
-  "name": "nimble-assessment.backend",
+  "name": "nimble-assessment.server",
   "version": "1.0.0",
   "description": "Google web scrapper Backend - Nimble Assessment",
   "main": "index.js",
