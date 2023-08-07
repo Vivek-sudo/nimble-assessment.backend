@@ -1,6 +1,5 @@
 require('dotenv').config();
 const express = require('express');
-const cookieParser = require('cookie-parser');
 const db = require('./config/dbConfig');
 
 // Import routes
@@ -21,7 +20,6 @@ db.authenticate()
     });
 
 app.use(express.json());
-app.use(cookieParser());
 
 // Routes
 app.use('/api', routes);

@@ -1,5 +1,7 @@
 const { CustomError } = require('../utils/errorHandler');
 const keywordService = require('../services/keywordService');
+const { scrapeGoogle } = require('../utils/scraper');
+const csvParser = require('csv-parser');
 
 const uploadCSV = async (req, res) => {
     // Ensure that the CSV file is provided in the request
@@ -25,10 +27,10 @@ const uploadCSV = async (req, res) => {
                 // Scrape data for each keyword and store it in the database
                 for (const keyword of keywords) {
                     // Scrape data using the scraper function
-                    const scrapedData = await scrapeGoogleData(keyword);
+                    const scrapedData = await scrapeGoogle(keyword);
 
                     // Create the keyword and its associated search result in the database
-                    await keywordService.createKeywordAndSearchResult(keyword, scrapedData, req.user.id);
+                    await keywordService.createKeyword(scrapedData, req.user.id);
                 }
 
                 res.status(200).json({ message: 'CSV file uploaded and data scraped successfully.' });

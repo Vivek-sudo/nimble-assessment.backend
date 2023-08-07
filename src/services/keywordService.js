@@ -34,14 +34,4 @@ async function getKeywordById(keywordId, userId) {
     }
 }
 
-async function createKeywordAndSearchResult(keywordData, userId) {
-    try {
-        const keyword = await createKeyword(keywordData, userId);
-        return keyword;
-    } catch (error) {
-        console.error('Error creating keyword:', error);
-        throw new CustomError('Failed to create keyword', 500);
-    }
-}
-
-module.exports = { createKeyword, getKeywordsByUser, getKeywordById, createKeywordAndSearchResult };
+module.exports = { createKeyword, getKeywordsByUser, getKeywordById };
