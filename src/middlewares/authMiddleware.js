@@ -4,6 +4,8 @@ const User = require('../models/user');
 const requireAuth = (req, res, next) => {
     const auth = req.headers.authorization;
     let token;
+
+    //Splitting Bearer from it
     if (auth) {
         token = auth.split('Bearer ')[1];
     }
