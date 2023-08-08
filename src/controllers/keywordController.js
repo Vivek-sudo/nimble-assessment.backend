@@ -3,7 +3,7 @@ const keywordService = require('../services/keywordService');
 const { scrapeGoogle } = require('../utils/scraper');
 const csvParser = require('csv-parser');
 
-const uploadCSV = async (req, res) => {
+const uploadCSV = async (req, res, next) => {
     // Ensure that the CSV file is provided in the request
     if (!req.files || !req.files.csvFile) {
         return res.status(400).json({ message: 'CSV file is missing in the request.' });
@@ -36,24 +36,22 @@ const uploadCSV = async (req, res) => {
                 res.status(200).json({ message: 'CSV file uploaded and data scraped successfully.' });
             });
     } catch (error) {
-        console.error('Error processing CSV file:', error);
-        throw new CustomError(error.message || 'Something went wrong', error.statusCode || 500);
+        next(error);
     }
 };
 
-const getAllKeywords = async (req, res) => {
+const getAllKeywords = async (req, res, next) => {
     const userId = req.user.id;
 
     try {
         const keywords = await keywordService.getKeywordsByUser(userId);
         res.status(200).json(keywords);
     } catch (error) {
-        console.error('Error fetching keywords:', error);
-        throw new CustomError(error.message || 'Something went wrong', error.statusCode || 500);
+        next(error);
     }
 };
 
-const getKeywordById = async (req, res) => {
+const getKeywordById = async (req, res, next) => {
     const { keywordId } = req.params;
     const userId = req.user.id;
 
@@ -61,8 +59,7 @@ const getKeywordById = async (req, res) => {
         const keyword = await keywordService.getKeywordById(keywordId, userId);
         res.status(200).json(keyword);
     } catch (error) {
-        console.error('Error fetching keyword by ID:', error);
-        throw new CustomError(error.message || 'Something went wrong', error.statusCode || 500);
+        next(error);
     }
 };
 

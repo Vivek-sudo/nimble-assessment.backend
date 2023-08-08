@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const db = require('./config/dbConfig');
+const cors = require('cors');
 
 // Import routes
 const routes = require('./routes');
@@ -9,6 +10,8 @@ const routes = require('./routes');
 const { errorHandler } = require('./utils/errorHandler');
 
 const app = express();
+
+app.use(cors())
 
 // Database connection
 db.authenticate()

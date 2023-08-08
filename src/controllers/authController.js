@@ -17,12 +17,11 @@ const register = async (req, res, next) => {
 
         res.status(201).json({ token: newUserToken });
     } catch (error) {
-        console.error('Error registering user:', error);
-        throw new CustomError(error.message || 'Something went wrong', error.statusCode || 500);
+        next(error);
     }
 };
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
     const { email, password } = req.body;
 
     try {
@@ -31,8 +30,7 @@ const login = async (req, res) => {
 
         res.status(200).json({ token: userToken });
     } catch (error) {
-        console.error('Error logging in user:', error);
-        throw new CustomError(error.message || 'Something went wrong', error.statusCode || 500);
+        next(error);
     }
 };
 
