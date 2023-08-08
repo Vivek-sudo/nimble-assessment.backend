@@ -25,7 +25,6 @@ const login = async (req, res, next) => {
     const { email, password } = req.body;
 
     try {
-        // Use userService.loginUser function to handle login process
         const userToken = await userService.loginUser(email, password);
 
         res.status(200).json({ token: userToken });

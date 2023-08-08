@@ -28,13 +28,13 @@ async function loginUser(email, password) {
         // Find the user by email
         const user = await User.findOne({ where: { email } });
         if (!user) {
-            throw new Error('User not found');
+            throw new CustomError('User not found', 400);
         }
 
         // Check if the password matches
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
-            throw new Error('Invalid password');
+            throw new CustomError('Invalid password', 401);
         }
 
         // Generate JWT token

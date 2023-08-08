@@ -11,7 +11,8 @@ const { errorHandler } = require('./utils/errorHandler');
 
 const app = express();
 
-app.use(cors())
+// Allow cross-reference
+app.use(cors());
 
 // Database connection
 db.authenticate()
@@ -22,11 +23,13 @@ db.authenticate()
         console.error('Unable to connect to the database:', err);
     });
 
+// Request body json
 app.use(express.json());
 
 // Routes
 app.use('/api', routes);
 
+// Error Handler
 app.use(errorHandler);
 
 module.exports = app;

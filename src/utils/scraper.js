@@ -1,17 +1,20 @@
 const puppeteer = require('puppeteer');
 const zlib = require('zlib');
 
-async function scrapeGoogle(keyword) {
+async function scrapeGoogle(browser, keyword) {
     try {
-        const browser = await puppeteer.launch();
         const page = await browser.newPage();
+
+        console.log(`Loading page for keyword : ${keyword}`);
+
         await page.goto(`https://www.google.com/search?q=${encodeURIComponent(keyword)}`);
 
         // Wait for the required elements to be rendered on the page
-        await page.waitForSelector('#tads > div');
-        await page.waitForSelector('#rso');
-        await page.waitForSelector('#result-stats');
-
+        await Promise.all([
+            page.waitForSelector('#tads > div', { timeout: 5000 }).catch(() => { }),
+            page.waitForSelector('#rso', { timeout: 5000 }).catch(() => { }),
+            page.waitForSelector('#result-stats', { timeout: 5000 }).catch(() => { })
+        ]);
         // Extract the number of AdWords advertisers
         const adWordsAdvertisers = await page.evaluate(() => {
             return document.querySelectorAll('#tads > div').length;
@@ -37,9 +40,11 @@ async function scrapeGoogle(keyword) {
 
         // Get the HTML code of the page
         const htmlCode = await page.content();
-        const compressedHtmlCode = zlib.deflateSync(htmlCode);
+        const compressedHtmlCode = zlib.gzipSync(htmlCode).toString('base64');
 
-        await browser.close();
+        await page.close();
+
+        console.log(`Data retrieved for keyword : ${keyword}`);
 
         const mergedData = {
             keyword,
@@ -56,4 +61,21 @@ async function scrapeGoogle(keyword) {
     }
 }
 
-module.exports = { scrapeGoogle };
+async function scrapeMultipleKeywords(keywords) {
+    const browser = await puppeteer.launch({
+        headless: 'new'
+    });
+
+    const scrapedResults = await Promise.all(
+        keywords.map(async keyword => {
+            const result = await scrapeGoogle(browser, keyword);
+            return result;
+        })
+    );
+
+    await browser.close();
+
+    return scrapedResults;
+}
+
+module.exports = { scrapeMultipleKeywords };
