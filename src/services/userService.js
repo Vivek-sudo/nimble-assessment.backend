@@ -5,11 +5,13 @@ const { CustomError } = require('../utils/errorHandler');
 
 async function registerUser(userData) {
     try {
+        const { email, password } = userData;
         // Hash the password
-        const hashedPassword = await bcrypt.hash(userData.password, 10);
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
 
         // Create the new user with hashed password
-        const newUser = await User.create({ ...userData, password: hashedPassword });
+        const newUser = await User.create({ email, password: hashedPassword });
 
         // Generate JWT token
         const token = generateToken(newUser.id);
