@@ -60,11 +60,11 @@ const getAllKeywords = async (req, res, next) => {
 
 const searchKeywords = async (req, res, next) => {
     const userId = req.user.id;
-    const { keyword, page, pageSize } = req.query;
+    const { keyword } = req.query;
 
     try {
         const keywords = await
-            keywordService.searchKeywordByUser(userId, keyword, page, pageSize);
+            keywordService.searchKeywordByUser(userId, keyword);
         res.status(200).json(keywords);
     } catch (error) {
         next(error);

@@ -14,6 +14,9 @@ router.post('/upload-csv', requireAuth, upload.single('csvFile'), keywordControl
 router.get('/', requireAuth, keywordController.getAllKeywords);
 
 // GET (Authenticated route)
+router.get('/search', requireAuth, keywordController.searchKeywords);
+
+// GET (Authenticated route)
 router.get('/:keywordId', requireAuth, keywordController.getKeywordById);
 
 module.exports = router;
