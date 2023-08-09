@@ -82,14 +82,13 @@ async function getKeywordById(keywordId, userId) {
     }
 }
 
-async function searchKeywordByUser(userId, keyword, page = 1, pageSize = 10) {
+async function searchKeywordByUser(userId, keyword) {
     if (!keyword) {
         throw new CustomError('Keyword not provided', 400);
     }
 
     try {
-        const offset = (page - 1) * pageSize;
-        const keywords = await Keyword.findAndCountAll({
+        const keywords = await Keyword.findAll({
             where: {
                 userId,
                 keyword: {
@@ -97,8 +96,6 @@ async function searchKeywordByUser(userId, keyword, page = 1, pageSize = 10) {
                 }
             },
             order: [['createdAt', 'DESC']],
-            offset,
-            limit: pageSize
         });
 
         return keywords;
